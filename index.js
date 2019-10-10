@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const exphbs = require('express-handlebars');
 const logger = require('./middlewares/logger')
 const app = express();
 
@@ -11,12 +12,23 @@ const app = express();
 // Init middleware
 /* app.use(logger); */
 
-//Body Parser Middleware
-app.use(express.json()); //handle json
-app.use(express.urlencoded({extended: false})); //handle form submission (handleurl encoded data)
+// Handlebars Middleware
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+
+// Body Parser Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false })); //handle form submission (handleurl encoded data)
+
+// Homepage Route
+app.get('/', (req, res) =>
+  res.render('index')
+);
+
+
 
 // Set static folder
-app.use(express.static(path.join(__dirname,'public'))); // use: method used when you want to include middlewares
+app.use(express.static(path.join(__dirname, 'public'))); // use: method used when you want to include middlewares
 
 //Members API Routes
 app.use('/api/members', require('./routes/api/members'));
