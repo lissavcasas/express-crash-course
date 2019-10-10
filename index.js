@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
-const logger = require('./middlewares/logger')
+const logger = require('./middlewares/logger');
+const members = require('./Members');
 const app = express();
 
 // Set public folder
@@ -22,10 +23,11 @@ app.use(express.urlencoded({ extended: false })); //handle form submission (hand
 
 // Homepage Route
 app.get('/', (req, res) =>
-  res.render('index')
+  res.render('index',{
+    title: 'Member App',
+    members
+  })
 );
-
-
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public'))); // use: method used when you want to include middlewares
